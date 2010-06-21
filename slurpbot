@@ -7,6 +7,8 @@ require 'uri'
 class SlurpBot
 
   def initialize(server, port, channel)
+    @threads = []
+    @debug = true
     @channel = channel
     @socket = TCPSocket.open(server, port)
     @nick = "slurp"
@@ -30,27 +32,51 @@ class SlurpBot
   end
 
   def log_url(msg, url)
-    res = send_post(msg, url)
+    @threads << send_post(msg, url)
+  end
+
+  def echo_response(res)
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
-      puts "#{url} successfully logged"
-      puts "#{msg} logged"
+      puts res.body
     else
       puts res.error!
     end
+    if @debug
+      puts "Thread count: #{@threads.count}"
+    end
+  end
+
+  def cleanup_threads
+    @threads.each_with_index do |thread, i|
+      if @debug
+        p thread
+      end
+      if thread.status == "sleep"
+        next
+      elsif thread.status == false  && thread.value
+        echo_response(thread.value)
+        pop_thread(i)
+      end
+    end
+  end
+
+  def pop_thread(index)
+    @threads.delete_at(index)
   end
 
   def send_post(msg, url)
-    add_url = "http://localhost:4567/link/create"
-    post_url = URI.parse(add_url)
-    req = Net::HTTP::Post.new(post_url.path)
-    req.set_form_data({
-      'url' => url,
-      'msg' => msg
-    })
-    http = Net::HTTP.new(post_url.host, post_url.port)
-    res = http.start {|http| http.request(req) }
-    return res
+    Thread.new do
+      add_url = "http://localhost:4567/link/create"
+      post_url = URI.parse(add_url)
+      req = Net::HTTP::Post.new(post_url.path)
+      req.set_form_data({
+        'url' => url,
+        'msg' => msg
+      })
+      http = Net::HTTP.new(post_url.host, post_url.port)
+      res = http.start {|http| http.request(req) }
+    end
   end
 
   def run
@@ -66,15 +92,16 @@ class SlurpBot
       if msg.match(/PRIVMSG ##{@channel} :(.*)$/)
         content = $~[1]
 
-        #put matchers here
         if content.match(/(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?/ix)
           log_url(msg, $~[0])
         end
       end
+      cleanup_threads
     end
   end
 
   def quit
+    @threads.each { |t| t.join }
     action "puts away his spoon and burps loudly"
     say "PART ##{@channel} :Quit"
     say 'QUIT'
