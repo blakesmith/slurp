@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+
+require 'socket'
+require 'net/http'
+require 'uri'
+
+class SlurpBot
+
+  def initialize(server, port, channel)
+    @channel = channel
+    @socket = TCPSocket.open(server, port)
+    @nick = "slurp"
+    say "NICK #{@nick}"
+    say "USER ircbot 0 * #{@nick}"
+    say "JOIN ##{@channel}"
+    action "gets out his spoon and starts gobbling links"
+  end
+
+  def say(msg)
+    puts msg
+    @socket.puts msg
+  end
+
+  def say_to_chan(msg)
+    say "PRIVMSG ##{@channel} :#{msg}"
+  end
+
+  def action(msg)
+    say_to_chan "#{1.chr}ACTION #{msg}#{1.chr}"
+  end
+
+  def log_url(msg, url)
+    res = send_post(msg, url)
+    case res
+    when Net::HTTPSuccess, Net::HTTPRedirection
+      puts "#{url} successfully logged"
+      puts "#{msg} logged"
+    else
+      puts res.error!
+    end
+  end
+
+  def send_post(msg, url)
+    add_url = "http://localhost:4567/link/create"
+    post_url = URI.parse(add_url)
+    req = Net::HTTP::Post.new(post_url.path)
+    req.set_form_data({
+      'url' => url,
+      'msg' => msg
+    })
+    http = Net::HTTP.new(post_url.host, post_url.port)
+    res = http.start {|http| http.request(req) }
+    return res
+  end
+
+  def run
+    until @socket.eof? do
+      msg = @socket.gets
+      puts msg
+
+      if msg.match(/^PING :(.*)$/)
+        say "PONG #{$~[1]}"
+        next
+      end
+
+      if msg.match(/PRIVMSG ##{@channel} :(.*)$/)
+        content = $~[1]
+
+        #put matchers here
+        if content.match(/(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?/ix)
+          log_url(msg, $~[0])
+        end
+      end
+    end
+  end
+
+  def quit
+    action "puts away his spoon and burps loudly"
+    say "PART ##{@channel} :Quit"
+    say 'QUIT'
+  end
+end
+
+bot = SlurpBot.new("irc.oftc.net", 6667, 'slurp-test')
+
+trap("INT"){ bot.quit }
+
+bot.run
