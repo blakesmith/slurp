@@ -68,7 +68,7 @@ class SlurpBot
 
   def send_post(msg, url)
     Thread.new do
-      post_url = URI.parse(add_url)
+      post_url = URI.parse(@add_url)
       req = Net::HTTP::Post.new(post_url.path)
       req.set_form_data({
         'url' => url,
