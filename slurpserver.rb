@@ -2,6 +2,11 @@ require 'rubygems'
 require 'sinatra'
 require 'db/helper'
 
+get '/' do
+  @links = Link.all
+  erb :index
+end
+
 post '/link/create' do
   match = params['msg'].match(/:(.*)!.* :(.*)/)
   user = match[1]
