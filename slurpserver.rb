@@ -3,7 +3,7 @@ require 'sinatra'
 require 'db/helper'
 
 get '/' do
-  @links = Link.all
+  @links = Link.order(:date_added).reverse
   erb :index
 end
 

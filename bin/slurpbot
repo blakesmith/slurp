@@ -8,7 +8,7 @@ class SlurpBot
 
   def initialize(server, port, channel)
     @threads = []
-    @add_url = "http://localhost:9393/link/create"
+    @add_url = "http://localhost:4567/link/create"
     @debug = true
     @channel = channel
     @socket = TCPSocket.open(server, port)
