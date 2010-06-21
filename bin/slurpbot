@@ -8,6 +8,7 @@ class SlurpBot
 
   def initialize(server, port, channel)
     @threads = []
+    @add_url = "http://localhost:9393/link/create"
     @debug = true
     @channel = channel
     @socket = TCPSocket.open(server, port)
@@ -67,7 +68,6 @@ class SlurpBot
 
   def send_post(msg, url)
     Thread.new do
-      add_url = "http://localhost:4567/link/create"
       post_url = URI.parse(add_url)
       req = Net::HTTP::Post.new(post_url.path)
       req.set_form_data({

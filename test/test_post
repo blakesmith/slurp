@@ -4,7 +4,7 @@ require 'socket'
 require 'net/http'
 require 'uri'
 
-add_url = "http://localhost:4567/link/create"
+add_url = "http://localhost:9393/link/create"
 post_url = URI.parse(add_url)
 req = Net::HTTP::Post.new(post_url.path)
 req.set_form_data({
