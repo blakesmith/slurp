@@ -108,8 +108,6 @@ class SlurpBot
   end
 end
 
-bot = SlurpBot.new("irc.oftc.net", 6667, 'slurp-test')
-
+bot = SlurpBot.new("localhost", 6667, 'test')
 trap("INT"){ bot.quit }
-
 bot.run
