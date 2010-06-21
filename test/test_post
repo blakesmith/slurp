@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'socket'
+require 'net/http'
+require 'uri'
+
+add_url = "http://localhost:4567/link/create"
+post_url = URI.parse(add_url)
+req = Net::HTTP::Post.new(post_url.path)
+req.set_form_data({
+  'url' => "http://google.com",
+  'msg' => ":blithe!~blithe@72.14.176.144 PRIVMSG #slurp-test :blah http://google.com blah"
+})
+http = Net::HTTP.new(post_url.host, post_url.port)
+res = http.start {|http| http.request(req) }
+p res.body
