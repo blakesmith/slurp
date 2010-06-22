@@ -100,6 +100,10 @@ class SlurpBot
         if content.match(/(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?/ix)
           log_url(msg, $~[0])
         end
+
+        if content.match(/pets #{@nick}/)
+          action "looks up from his bowl of links and wiggles excitedly!"
+        end
       end
       cleanup_threads
     end
