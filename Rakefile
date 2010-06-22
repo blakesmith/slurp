@@ -9,7 +9,4 @@ task :drop_table do
 end
 
 desc "recreate the table"
-task :recreate_table do
-  drop_table
-  create_schema
-end
+task :recreate_table => [:drop_table, :create_schema]
