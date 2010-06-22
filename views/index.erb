@@ -15,7 +15,7 @@
     <% end %>
     <table>
     <% @links.each do |link| %>
-      <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.title %></a></td><td><%= link.message %></td><td> <%= link.date_added %></td></tr>
+      <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.title || "Link" %></a></td><td><%= link.message %></td><td> <%= link.date_added %></td></tr>
     <% end %>
     </table>
   </body>
