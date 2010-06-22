@@ -50,7 +50,7 @@ class SlurpBot
     when Net::HTTPSuccess, Net::HTTPRedirection
       puts res.body
     else
-      puts res.error!
+      puts "An error occured."
     end
     if @debug
       puts "Thread count: #{@threads.count}"
