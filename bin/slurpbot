@@ -10,7 +10,8 @@ class SlurpBot
     @server = server
     @port = port
     @threads = []
-    @add_url = "http://localhost:4567/link/create"
+    #@add_url = "http://localhost:4567/link/create"
+    @add_url = "http://afternoon-flower-68.heroku.com/link/create"
     @debug = true
     @channel = channel
     @nick = "slurp"
@@ -124,7 +125,7 @@ class SlurpBot
 
 end
 
-bot = SlurpBot.new("localhost", 6667, 'test')
+bot = SlurpBot.new("irc.oftc.net", 6667, 'slurp-test')
 trap("INT"){ bot.shutdown }
 
 while true do
@@ -133,6 +134,6 @@ while true do
     bot.join
     bot.run
   end
-  sleep 3
+  sleep 90
   puts "Waiting to reconnect..."
 end
