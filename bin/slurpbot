@@ -132,7 +132,7 @@ def is_production?
   ARGV.size == 0
 end
 
-add_url = is_production? ? "http://afternoon-flower-68.heroku.com/link/create" : "http://localhost:4567/link/create"
+add_url = is_production? ? "http://slurp.heroku.com/link/create" : "http://localhost:4567/link/create"
 server = is_production? ? 'irc.oftc.net' : 'localhost'
 channel = is_production? ? 'randonom' : 'slurp-test'
 
