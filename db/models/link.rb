@@ -5,6 +5,10 @@ require 'open-uri'
 class Link < Sequel::Model
 
   def self.fetch_title(url)
-    Nokogiri::HTML(open(url)).css('title').text
+    doc = open(url)
+    if doc.status.first == "200"
+      select = Nokogiri::HTML(doc).css('title')
+      select ? select.text : "Unknown"
+    end
   end
 end
