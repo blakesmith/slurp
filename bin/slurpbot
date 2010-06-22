@@ -7,12 +7,20 @@ require 'uri'
 class SlurpBot
 
   def initialize(server, port, channel)
+    @server = server
+    @port = port
     @threads = []
     @add_url = "http://localhost:4567/link/create"
     @debug = true
     @channel = channel
-    @socket = TCPSocket.open(server, port)
     @nick = "slurp"
+  end
+
+  def connect
+    @socket = TCPSocket.open(@server, @port)
+  end
+
+  def join
     say "NICK #{@nick}"
     say "USER ircbot 0 * #{@nick}"
     say "JOIN ##{@channel}"
@@ -50,9 +58,6 @@ class SlurpBot
 
   def cleanup_threads
     @threads.each_with_index do |thread, i|
-      if @debug
-        p thread
-      end
       if thread.status == "sleep"
         next
       elsif thread.status == false  && thread.value
@@ -80,7 +85,7 @@ class SlurpBot
   end
 
   def run
-    until @socket.eof? do
+    until @socket.closed? do
       msg = @socket.gets
       puts msg
 
@@ -98,16 +103,36 @@ class SlurpBot
       end
       cleanup_threads
     end
+    part
   end
 
-  def quit
-    @threads.each { |t| t.join }
+  def part
     action "puts away his spoon and burps loudly"
     say "PART ##{@channel} :Quit"
     say 'QUIT'
   end
+
+  def shutdown
+    part
+    @threads.each { |t| t.join }
+    exit
+  end
+
+  def alive?
+    !@socket.closed? if @socket
+  end
+
 end
 
 bot = SlurpBot.new("localhost", 6667, 'test')
-trap("INT"){ bot.quit }
-bot.run
+trap("INT"){ bot.shutdown }
+
+while true do
+  unless bot.alive?
+    bot.connect
+    bot.join
+    bot.run
+  end
+  sleep 3
+  puts "Waiting to reconnect..."
+end
