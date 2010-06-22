@@ -1,6 +1,16 @@
-<h1>Links!</h1>
-  <table>
-  <% @links.each do |link| %>
-    <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.title %></a></td><td> <%= link.date_added %></td></tr>
-  <% end %>
-  </table>
+<html>
+  <head>
+    <title>#randonom links</title>
+  </head>
+  <body>
+    <h1>#randonom links</h1>
+    <% unless @links %>
+      Currently no links, you should post some in the chat.
+    <% end %>
+    <table>
+    <% @links.each do |link| %>
+      <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.title %></a></td><td><%= link.message %></td><td> <%= link.date_added %></td></tr>
+    <% end %>
+    </table>
+  </body>
+</html>
