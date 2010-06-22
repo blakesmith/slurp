@@ -1,6 +1,6 @@
 <h1>Links!</h1>
-  <ul>
+  <table>
   <% @links.each do |link| %>
-    <li><%= link.user %>: <a href="<%= link.url %>"><%= link.title %></a></li>
+    <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.title %></a></td><td> <%= link.date_added %></td></tr>
   <% end %>
-  </ul>
+  </table>
