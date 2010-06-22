@@ -6,12 +6,11 @@ require 'uri'
 
 class SlurpBot
 
-  def initialize(server, port, channel)
+  def initialize(server, port, channel, add_url)
     @server = server
     @port = port
     @threads = []
-    #@add_url = "http://localhost:4567/link/create"
-    @add_url = "http://afternoon-flower-68.heroku.com/link/create"
+    @add_url = add_url
     @debug = true
     @channel = channel
     @nick = "slurp"
@@ -125,7 +124,15 @@ class SlurpBot
 
 end
 
-bot = SlurpBot.new("irc.oftc.net", 6667, 'slurp-test')
+def is_production?
+  ARGV.size == 0
+end
+
+add_url = is_production? ? "http://afternoon-flower-68.heroku.com/link/create" : "http://localhost:4567/link/create"
+server = is_production? ? 'irc.oftc.net' : 'localhost'
+channel = is_production? ? 'randonom' : 'slurp-test'
+
+bot = SlurpBot.new(server, 6667, channel, add_url)
 trap("INT"){ bot.shutdown }
 
 while true do
