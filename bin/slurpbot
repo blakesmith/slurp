@@ -24,7 +24,6 @@ class SlurpBot
     say "NICK #{@nick}"
     say "USER ircbot 0 * #{@nick}"
     say "JOIN ##{@channel}"
-    action "gets out his spoon and starts gobbling links"
   end
 
   def say(msg)
@@ -111,7 +110,6 @@ class SlurpBot
   end
 
   def part
-    action "puts away his spoon and burps loudly"
     say "PART ##{@channel} :Quit"
     say 'QUIT'
   end
