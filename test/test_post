@@ -8,8 +8,8 @@ add_url = "http://localhost:4567/link/create"
 post_url = URI.parse(add_url)
 req = Net::HTTP::Post.new(post_url.path)
 req.set_form_data({
-  'url' => "http://stackoverflow.com/questions/161738/what-is-the-best-regular-expression-to-check-if-a-string-is-a-valid-url",
-  'msg' => ":blithe!~blithe@72.14.176.144 PRIVMSG #slurp-test :blah lol @ lol @ http://stackoverflow.com/questions/161738/what-is-the-best-regular-expression-to-check-if-a-string-is-a-valid-url."
+  'url' => "http://www.apps.ietf.org/rfc/rfc3986.html",
+  'msg' => ":blithe!~blithe@72.14.176.144 PRIVMSG #slurp-test :http://www.apps.ietf.org/rfc/rfc3986.html"
 })
 http = Net::HTTP.new(post_url.host, post_url.port)
 res = http.start {|http| http.request(req) }
