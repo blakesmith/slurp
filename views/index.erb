@@ -1,6 +1,6 @@
 <h1>Links!</h1>
   <ul>
   <% @links.each do |link| %>
-    <li><%= link.user %>: <a href="<%= link.url %>"><%= link.url %></a></li>
+    <li><%= link.user %>: <a href="<%= link.url %>"><%= link.title %></a></li>
   <% end %>
   </ul>

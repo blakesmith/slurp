@@ -6,5 +6,6 @@ DB.create_table :links do
   String :url
   String :user
   String :message
+  String :title
 end
 
