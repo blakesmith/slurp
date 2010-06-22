@@ -1,1 +1,1 @@
-Slurp Bot
+Slurp is a simple irc bot that harvests links in an IRC channel and posts them to a Sinatra web server. It's mostly for fun.
