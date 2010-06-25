@@ -143,6 +143,7 @@ while true do
     bot.join
     bot.run
   end
-  sleep 90
-  puts "Waiting to reconnect..."
+  sleep_time = 90
+  puts "Waiting #{sleep_time} seconds to reconnect..."
+  sleep sleep_time
 end
