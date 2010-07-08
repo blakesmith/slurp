@@ -132,7 +132,7 @@ end
 
 add_url = is_production? ? "http://slurp.heroku.com/link/create" : "http://localhost:4567/link/create"
 server = is_production? ? 'irc.oftc.net' : 'localhost'
-channel = is_production? ? 'randonom' : 'slurp-test'
+channel = is_production? ? 'blackscreen' : 'slurp-test'
 
 bot = SlurpBot.new(server, 6667, channel, add_url)
 trap("INT"){ bot.shutdown }
