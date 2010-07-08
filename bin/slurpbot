@@ -39,8 +39,8 @@ class SlurpBot
     say_to_chan "#{1.chr}ACTION #{msg}#{1.chr}"
   end
 
-  def log_url(msg, url)
-    @threads << send_post(msg, url)
+  def log_url(msg, channel, url)
+    @threads << send_post(msg, channel, url)
   end
 
   def echo_response(res)
