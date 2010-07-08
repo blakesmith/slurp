@@ -5,9 +5,22 @@
     <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="css/demo_page.css" type="text/css" /> 
     <link rel="stylesheet" href="css/demo_table.css" type="text/css" /> 
+    <style>
+      body {
+	font-family: "Helvetica", sans-serif;
+	font-size: 10px;
+      }
+      #links {
+	width: 95%;
+      }
+      td {
+	width: 30px;
+      }
+    </style>
     <script type="text/javascript">
       $(document).ready(function(){
 	$('#links').dataTable({
+	    "sPaginationType": "full_numbers",
 	    "aaSorting": [[ 4, "desc" ]],
 	    "aoColumns": [
 	      null,
@@ -38,7 +51,7 @@
       </thead>
       <tbody>
 	<% @links.each do |link| %>
-	  <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.sanitized_title %></a></td><td><%= link.message %></td><td><%= link.channel %></td><td> <%= link.date_added %></td></tr>
+	  <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.sanitized_title %></a></td><td><%= link.shortened_message %></td><td><%= link.channel %></td><td> <%= link.date_added %></td></tr>
 	<% end %>
     </tbody>
     </table>
