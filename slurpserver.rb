@@ -21,10 +21,11 @@ post '/link/create' do
   match = params['msg'].match(/:(.*)!.* :(.*)/)
   user = match[1]
   msg = match[2]
+  channel = params['channel']
   if match
     title = Link.fetch_title(params['url'])
-    Link.create :user => user, :url => params['url'], :date_added => Time.now, :message => msg, :title => title
-    "#{params['url']} saved with message: #{params['msg']}\nuser: #{user}\nmsg: #{msg}"
+    Link.create :user => user, :channel => channel, :url => params['url'], :date_added => Time.now, :message => msg, :title => title
+    "#{params['url']} saved with message: #{params['msg']}\nuser: #{user}\nchannel: #{channel}\nmsg: #{msg}"
   else
     "Post failed"
   end
