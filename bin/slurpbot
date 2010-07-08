@@ -70,13 +70,14 @@ class SlurpBot
     @threads.delete_at(index)
   end
 
-  def send_post(msg, url)
+  def send_post(msg, channel, url)
     Thread.new do
       post_url = URI.parse(@add_url)
       req = Net::HTTP::Post.new(post_url.path)
       req.set_form_data({
         'url' => url,
-        'msg' => msg
+        'msg' => msg,
+        'channel' => channel
       })
       http = Net::HTTP.new(post_url.host, post_url.port)
       res = http.start {|http| http.request(req) }
@@ -93,11 +94,13 @@ class SlurpBot
         next
       end
 
-      if msg.match(/PRIVMSG ##{@channel} :(.*)$/)
-        content = $~[1]
+      if msg.match(/PRIVMSG #(#{@channels.join("|")}) :(.*)$/)
+        content = $~[2]
+        channel = $~[1]
 
         if content.match(/(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?/ix)
-          log_url(msg, $~[0])
+          
+          log_url(msg, channel, $~[0])
         end
 
         if content.match(/pets #{@nick}/)
@@ -110,7 +113,7 @@ class SlurpBot
   end
 
   def part
-    say "PART ##{@channel} :Quit"
+    @channels.each {|c| say "PART ##{c} :Quit"
     say 'QUIT'
   end
 
