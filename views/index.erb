@@ -7,7 +7,16 @@
     <link rel="stylesheet" href="css/demo_table.css" type="text/css" /> 
     <script type="text/javascript">
       $(document).ready(function(){
-	$('#links').dataTable();
+	$('#links').dataTable({
+	    "aaSorting": [[ 4, "desc" ]],
+	    "aoColumns": [
+	      null,
+	      null,
+	      null,
+	      null,
+	      null
+	    ]}
+	  );
       });
     </script>
   </head>
