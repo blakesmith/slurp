@@ -1,11 +1,15 @@
 <html>
   <head>
     <title>irc links</title>
-    <style>
-      td {
-        background-color: #DDD;
-      }
-    </style>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="css/demo_page.css" type="text/css" /> 
+    <link rel="stylesheet" href="css/demo_table.css" type="text/css" /> 
+    <script type="text/javascript">
+      $(document).ready(function(){
+	$('#links').dataTable();
+      });
+    </script>
   </head>
   <body>
     <h1>irc links</h1>
@@ -13,10 +17,21 @@
     <% unless @links %>
       Currently no links, you should post some in the chat.
     <% end %>
-    <table>
-    <% @links.each do |link| %>
-      <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.sanitized_title %></a></td><td><%= link.message %></td><td><%= link.channel %></td><td> <%= link.date_added %></td></tr>
-    <% end %>
+    <table id="links">
+      <thead>
+	<tr>
+	  <th>user</th>
+	  <th>link</th>
+	  <th>message</th>
+	  <th>channel</th>
+	  <th>date</th>
+	</tr>
+      </thead>
+      <tbody>
+	<% @links.each do |link| %>
+	  <tr><td><%= link.user %></td><td><a href="<%= link.url %>"><%= link.sanitized_title %></a></td><td><%= link.message %></td><td><%= link.channel %></td><td> <%= link.date_added %></td></tr>
+	<% end %>
+    </tbody>
     </table>
   </body>
 </html>
