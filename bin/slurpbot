@@ -113,7 +113,7 @@ class SlurpBot
   end
 
   def part
-    @channels.each {|c| say "PART ##{c} :Quit"
+    @channels.each {|c| say "PART ##{c} :Quit"}
     say 'QUIT'
   end
 
