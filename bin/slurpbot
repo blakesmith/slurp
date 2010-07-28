@@ -12,6 +12,7 @@ class SlurpBot
     @threads = []
     @add_url = add_url
     @debug = true
+    @auto_join_invite = true
     @channels = channels
     @nick = "slurp"
   end
@@ -94,6 +95,13 @@ class SlurpBot
         next
       end
 
+      if msg.match(/INVITE #{@nick} :(.*)$/)
+        channel = $~[1].delete("#").strip
+        puts "Invite to #{channel} received" if @debug
+        say "JOIN ##{channel}" if should_join_invite?(channel)
+        next
+      end
+
       if msg.match(/PRIVMSG #(#{@channels.join("|")}) :(.*)$/)
         content = $~[2]
         channel = $~[1]
@@ -125,6 +133,10 @@ class SlurpBot
 
   def alive?
     !@socket.closed? if @socket
+  end
+
+  def should_join_invite?(channel)
+    @channels.include?(channel) && @auto_join_invite
   end
 
 end
